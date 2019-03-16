@@ -50,6 +50,7 @@ namespace enumivo {
                     name    to_token_issuer,
                     asset   quantity);
 
+      private:
          static asset get_supply( name token_contract_account, name issuer)
          {
             issuers issuerstable( token_contract_account, issuer.value );
@@ -84,7 +85,7 @@ namespace enumivo {
 
          static void applied_assert( name token_contract_account, name issuer ) {
             issuers issuerstable( token_contract_account, issuer.value );
-            auto& existing = issuerstable.find( issuer.value );
+            auto existing = issuerstable.find( issuer.value );
             enumivo_assert( existing != issuerstable.end(), "issuer does not apply for ubi yet" );
          }
 
@@ -109,7 +110,7 @@ namespace enumivo {
          static void connections_not_exceed_assert( name token_contract_account, name issuer ) {
            connections connectiontable( token_contract_account, issuer.value );
            uint32_t num = 0;
-           for (const auto& conn : connectiontable) {
+           for (auto conn : connectiontable) {
               const auto& st = *conn;
               num += st.trust_due_time > current_time() ? 1 : 0;
            }
@@ -124,7 +125,6 @@ namespace enumivo {
            enumivo_assert( st.trust_due_time > current_time(), "connection expire" );
          }
 
-      private:
          struct [[enumivo::table]] account {
             asset    balance;
             name     issuer;
@@ -171,7 +171,7 @@ namespace enumivo {
          void connect( name ram_payer, name  from, name to, bool revocable );
          void disconnect( name  from, name to);
          
-         void token::internal_transfer( name    from,
+         void internal_transfer( name    from,
                                 name    to,
                                 name    token_issuer,
                                 asset   quantity,
