@@ -23,7 +23,7 @@ void token::apply( name issuer, name referral )
        s.next_issue_quantity = asset{ 0, ubi_symbol };
     });
   } else {
-    issuer_not_accepted_assert(_self, issuer);
+    not_accepted_assert(_self, issuer);
     const auto& st = *existing;
     // update apply
     issuerstable.modify( st, same_payer, [&]( auto& s ) {

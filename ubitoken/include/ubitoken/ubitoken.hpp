@@ -51,6 +51,10 @@ namespace enumivo {
                     asset   quantity);
 
       private:
+
+#define issue_wait_time (1000000 * 3600 * 24) // wait 1 day to issue
+#define disconnect_wait_time (1000000 * 3600 * 24 * 30) // wait 30 days to due
+#define connection_maximum 50 
          static asset get_supply( name token_contract_account, name issuer)
          {
             issuers issuerstable( token_contract_account, issuer.value );
@@ -110,9 +114,8 @@ namespace enumivo {
          static void connections_not_exceed_assert( name token_contract_account, name issuer ) {
            connections connectiontable( token_contract_account, issuer.value );
            uint32_t num = 0;
-           for (auto conn : connectiontable) {
-              const auto& st = *conn;
-              num += st.trust_due_time > current_time() ? 1 : 0;
+           for (const auto &conn : connectiontable) {
+              num += conn.trust_due_time > current_time() ? 1 : 0;
            }
            enumivo_assert( num <= connection_maximum, "issuer's connections reach max limit.");
          }
@@ -153,11 +156,8 @@ namespace enumivo {
          };
 
          const uint64_t time_maximum = 0xffffffffffffffff;
-         const uint64_t issue_wait_time = 1000 * 3600 * 24; // wait 1 day to issue
-         const uint64_t disconnect_wait_time = 1000 * 3600 * 24 * 30; // wait 30 days to due
          const int64_t  initial_issue_quantity = 1000000; // 100.0000 UBI
          const int64_t delta = 100; // each issue decrease 0.01 UBI
-         const uint64_t connection_maximum = 50;
 
          static constexpr symbol ubi_symbol = symbol(symbol_code("UBI"), 4);
 
