@@ -242,4 +242,4 @@ void ubitoken::add_balance( name owner, name issuer, asset value, name ram_payer
 
 } /// namespace enumivo
 
-ENUMIVO_DISPATCH( enumivo::ubitoken, (apply)(accept)(trust)(untrust)(issue)(send)(trustsend)(swap) )
+ENUMIVO_DISPATCH( enumivo::ubitoken, (launch)(apply)(accept)(trust)(untrust)(issue)(send)(trustsend)(swap) )

@@ -62,6 +62,7 @@ public:
    fc::variant get_issuer( account_name acc )
    {
       vector<char> data = get_row_by_account( N(ubitoken), acc, N(issuers), acc );
+      printf("get issuer, data size:%d", data.size());
       return data.empty() ? fc::variant() : abi_ser.binary_to_variant( "issuer", data, abi_serializer_max_time );
    }
 
@@ -150,13 +151,25 @@ BOOST_AUTO_TEST_SUITE(ubitoken_tests)
 
 BOOST_FIXTURE_TEST_CASE( launch_tests, ubitoken_tester ) try {
 
+
+	/*
+   BOOST_CHECK_EXCEPTION( launch( N(alice) ) , asset_type_exception, [](const asset_type_exception& e) {
+      return expect_assert_message(e, "magnitude of asset amount must be less than 2^62");
+   });
+   */
+
+	/*
+   BOOST_REQUIRE_EQUAL( wasm_assert_msg( "" ),
+	   launch( N(alice) )
+   ); */
+
    auto token = launch( N(alice) );
    auto issuer = get_issuer( N(alice) );
    REQUIRE_MATCHING_OBJECT( issuer, mvo()
       ("issuer", "alice")
       ("referral", "alice")
       ("apply", "alice")
-      ("last_issue_time", "alice")
+      ("last_issue_time", 0)
       ("supply", "0.0000 UBI")
       ("next_issue_quantity", "100.0000 UBI")
    );
