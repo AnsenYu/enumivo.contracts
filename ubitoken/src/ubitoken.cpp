@@ -152,7 +152,7 @@ void ubitoken::issue( name issuer )
     add_balance( referral, issuer, referral_quantity, issuer );
 }
 
-void ubitoken::transfer( name    from,
+void ubitoken::send( name    from,
                       name    to,
                       name    token_issuer,
                       asset   quantity,
@@ -165,7 +165,7 @@ void ubitoken::transfer( name    from,
     internal_transfer( from, to, token_issuer, quantity, from);
 }
 
-void ubitoken::trusttransfer( name    from,
+void ubitoken::trustsend( name    from,
                       name    to,
                       name    token_issuer,
                       asset   quantity,
@@ -242,4 +242,4 @@ void ubitoken::add_balance( name owner, name issuer, asset value, name ram_payer
 
 } /// namespace enumivo
 
-ENUMIVO_DISPATCH( enumivo::ubitoken, (apply)(accept)(trust)(untrust)(issue)(transfer)(swap) )
+ENUMIVO_DISPATCH( enumivo::ubitoken, (apply)(accept)(trust)(untrust)(issue)(send)(trustsend)(swap) )

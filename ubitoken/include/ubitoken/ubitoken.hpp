@@ -17,7 +17,7 @@ namespace enumivo {
 
    using std::string;
 
-   class [[enumivo::contract("ubitokentest")]] ubitoken : public contract {
+   class [[enumivo::contract("ubitoken")]] ubitoken : public contract {
       public:
          using contract::contract;
 
@@ -40,14 +40,14 @@ namespace enumivo {
          void issue(  name  issuer );
 
          [[enumivo::action]]
-         void transfer( name    from,
+         void send( name    from,
                         name    to,
                         name    issuer,
                         asset   quantity,
                         string  memo );
 
          [[enumivo::action]]
-         void trusttransfer( name    from,
+         void trustsend( name    from,
                         name    to,
                         name    issuer,
                         asset   quantity,

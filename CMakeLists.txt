@@ -30,12 +30,12 @@ else()
 endif()
 
 
+add_subdirectory(ubitoken)
 add_subdirectory(enu.bios)
 add_subdirectory(enu.msig)
 add_subdirectory(enu.wrap)
 add_subdirectory(enu.system)
 add_subdirectory(enu.token)
-add_subdirectory(ubitoken)
 
 if (APPLE)
    set(OPENSSL_ROOT "/usr/local/opt/openssl")
