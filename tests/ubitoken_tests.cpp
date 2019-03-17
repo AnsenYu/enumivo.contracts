@@ -75,7 +75,7 @@ public:
    action_result apply( account_name acc,
                 account_name referral ) {
 
-      return push_action( N(ubitoken), N(apply), mvo()
+      return push_action( acc, N(apply), mvo()
            ( "acc", acc)
            ( "referral", referral)
       );
@@ -84,7 +84,7 @@ public:
    action_result accept( account_name acc,
                 account_name candidate ) {
 
-      return push_action( N(ubitoken), N(accept), mvo()
+      return push_action( acc, N(accept), mvo()
            ( "acc", acc)
            ( "candidate", candidate)
       );
@@ -93,7 +93,7 @@ public:
    action_result trust( account_name from,
                 account_name to ) {
 
-      return push_action( N(ubitoken), N(trust), mvo()
+      return push_action( from, N(trust), mvo()
            ( "from", from)
            ( "to", to)
       );
@@ -102,7 +102,7 @@ public:
    action_result untrust( account_name from,
                 account_name to ) {
 
-      return push_action( N(ubitoken), N(untrust), mvo()
+      return push_action( from, N(untrust), mvo()
            ( "from", from)
            ( "to", to)
       );
@@ -110,7 +110,7 @@ public:
 
    action_result issue( account_name issuer ) {
 
-      return push_action( N(ubitoken), N(issue), mvo()
+      return push_action( issuer, N(issue), mvo()
            ( "issuer", issuer)
       );
    }
