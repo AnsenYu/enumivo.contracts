@@ -21,6 +21,7 @@ using namespace enu_system;
 
 BOOST_AUTO_TEST_SUITE(enu_system_tests)
 
+#ifdef SYSTEM_TEST
 BOOST_FIXTURE_TEST_CASE( buysell, enu_system_tester ) try {
 
    BOOST_REQUIRE_EQUAL( core_sym::from_string("0.0000"), get_balance( "alice1111111" ) );
@@ -3583,5 +3584,7 @@ BOOST_FIXTURE_TEST_CASE( buy_pin_sell_ram, enu_system_tester ) try {
    BOOST_REQUIRE( double(tokens_paid_for_ram.get_amount() - tokens_received_by_selling_ram.get_amount()) / tokens_paid_for_ram.get_amount() < 0.01 );
 
 } FC_LOG_AND_RETHROW()
+
+#endif
 
 BOOST_AUTO_TEST_SUITE_END()

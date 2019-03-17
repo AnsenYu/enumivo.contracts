@@ -123,6 +123,7 @@ public:
 
 BOOST_AUTO_TEST_SUITE(enu_token_tests)
 
+#ifdef ENU_TOKEN_TEST
 BOOST_FIXTURE_TEST_CASE( create_tests, enu_token_tester ) try {
 
    auto token = create( N(alice), asset::from_string("1000.000 TKN"));
@@ -425,5 +426,6 @@ BOOST_FIXTURE_TEST_CASE( close_tests, enu_token_tester ) try {
    BOOST_REQUIRE_EQUAL(true, alice_balance.is_null() );
 
 } FC_LOG_AND_RETHROW()
+#endif
 
 BOOST_AUTO_TEST_SUITE_END()

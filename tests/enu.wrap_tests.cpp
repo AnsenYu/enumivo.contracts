@@ -162,6 +162,7 @@ transaction enu_wrap_tester::reqauth( account_name from, const vector<permission
 
 BOOST_AUTO_TEST_SUITE(enu_wrap_tests)
 
+#ifdef WRAP_TEST
 BOOST_FIXTURE_TEST_CASE( wrap_exec_direct, enu_wrap_tester ) try {
    auto trx = reqauth( N(bob), {permission_level{N(bob), config::active_name}} );
 
@@ -356,5 +357,6 @@ BOOST_FIXTURE_TEST_CASE( wrap_with_msig_producers_change, enu_wrap_tester ) try 
    BOOST_REQUIRE_EQUAL( transaction_receipt::executed, traces[1]->receipt->status );
 
 } FC_LOG_AND_RETHROW()
+#endif
 
 BOOST_AUTO_TEST_SUITE_END()
