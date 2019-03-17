@@ -165,8 +165,8 @@ namespace enumivo {
          static const int64_t  initial_issue_quantity = 1000000; // 100.0000 UBI
          static const int64_t delta = 100; // each issue decrease 0.01 UBI
          static const int64_t referral_rewarding_percentage = 1; // 1% of each issued UBI goes to the referral
-         static const uint64_t issue_wait_time  = (1000000 * 3600 * 24); // wait 1 day to issue
-         static const uint64_t disconnect_wait_time = (1000000 * 3600 * 24 * 30); // wait 30 days to due
+         static constexpr uint64_t issue_wait_time  = (1000000 * 3600 * 24); // wait 1 day to issue
+         static constexpr uint64_t disconnect_wait_time = (1000000 * 3600 * 24 * 30); // wait 30 days to due
          static const uint32_t connection_maximum = 50; 
 
          static constexpr symbol ubi_symbol = symbol(symbol_code("UBI"), 4);

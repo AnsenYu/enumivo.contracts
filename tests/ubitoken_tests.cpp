@@ -152,7 +152,7 @@ BOOST_FIXTURE_TEST_CASE( launch_tests, ubitoken_tester ) try {
 
    auto token = launch( N(alice) );
    auto issuer = get_issuer( N(alice) );
-   REQUIRE_MATCHING_OBJECT( stats, mvo()
+   REQUIRE_MATCHING_OBJECT( issuer, mvo()
       ("issuer", "alice")
       ("referral", "alice")
       ("apply", "alice")
