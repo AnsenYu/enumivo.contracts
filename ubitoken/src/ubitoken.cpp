@@ -7,7 +7,7 @@
 
 namespace enumivo {
 
-void token::launch( name genesis )
+void ubitoken::launch( name genesis )
 {
   require_auth( _self );
   enumivo_assert( is_account( genesis ), "genesis account does not exist");
@@ -22,7 +22,7 @@ void token::launch( name genesis )
   });
 }
 
-void token::apply( name issuer, name referral )
+void ubitoken::apply( name issuer, name referral )
 {
   require_auth( issuer );
   enumivo_assert( is_account( referral ), "referral  account does not exist");
@@ -48,7 +48,7 @@ void token::apply( name issuer, name referral )
   }
 }
 
-void token::accept( name issuer, name candidate )
+void ubitoken::accept( name issuer, name candidate )
 {
   require_auth( issuer );
   enumivo_assert( is_account( candidate ), "referral  account does not exist");
@@ -74,7 +74,7 @@ void token::accept( name issuer, name candidate )
   connect(issuer, candidate, issuer, revocable);
 }
 
-void token::connect( name ram_payer, name from, name to, bool revocable) {
+void ubitoken::connect( name ram_payer, name from, name to, bool revocable) {
   connections_not_exceed_assert(_self, from);
   connections connectiontable( _self, from.value );
   auto existing = connectiontable.find(to.value);
@@ -95,7 +95,7 @@ void token::connect( name ram_payer, name from, name to, bool revocable) {
 
 }
 
-void token::disconnect(name from, name to) {
+void ubitoken::disconnect(name from, name to) {
   connections connectiontable( _self, from.value );
   auto existing = connectiontable.find(to.value);
   enumivo_assert( existing != connectiontable.end(), "connection not exists." );
@@ -107,7 +107,7 @@ void token::disconnect(name from, name to) {
   });
 }
 
-void token::trust(name from, name to) {
+void ubitoken::trust(name from, name to) {
   require_auth( from );
   enumivo_assert( is_account( to ), "to account does not exist");
 
@@ -117,7 +117,7 @@ void token::trust(name from, name to) {
   connect(from, from, to, false);
 }
 
-void token::untrust(name from, name to) {
+void ubitoken::untrust(name from, name to) {
   require_auth( from );
   enumivo_assert( is_account( to ), "to account does not exist");
 
@@ -127,7 +127,7 @@ void token::untrust(name from, name to) {
   disconnect(from, to);
 }
 
-void token::issue( name issuer )
+void ubitoken::issue( name issuer )
 {
     require_auth( issuer );
     issue_qualify_assert( _self, issuer );
@@ -152,7 +152,7 @@ void token::issue( name issuer )
     add_balance( referral, issuer, referral_quantity, issuer );
 }
 
-void token::transfer( name    from,
+void ubitoken::transfer( name    from,
                       name    to,
                       name    token_issuer,
                       asset   quantity,
@@ -165,7 +165,7 @@ void token::transfer( name    from,
     internal_transfer( from, to, token_issuer, quantity, from);
 }
 
-void token::trusttransfer( name    from,
+void ubitoken::trusttransfer( name    from,
                       name    to,
                       name    token_issuer,
                       asset   quantity,
@@ -179,7 +179,7 @@ void token::trusttransfer( name    from,
     internal_transfer( from, to, token_issuer, quantity, from);
 }
 
-void token::internal_transfer( name    from,
+void ubitoken::internal_transfer( name    from,
                       name    to,
                       name    token_issuer,
                       asset   quantity,
@@ -199,7 +199,7 @@ void token::internal_transfer( name    from,
     add_balance( to, token_issuer, quantity, ram_payer );
 }
 
-void token::swap( name    from,
+void ubitoken::swap( name    from,
           name    to,
           name    from_token_issuer,
           name    to_token_issuer,
@@ -213,7 +213,7 @@ void token::swap( name    from,
 }
 
 
-void token::sub_balance( name owner, name issuer, asset value ) {
+void ubitoken::sub_balance( name owner, name issuer, asset value ) {
    accounts from_acnts( _self, owner.value );
 
    const auto& from = from_acnts.get( issuer.value, "no balance object found" );
@@ -224,7 +224,7 @@ void token::sub_balance( name owner, name issuer, asset value ) {
       });
 }
 
-void token::add_balance( name owner, name issuer, asset value, name ram_payer )
+void ubitoken::add_balance( name owner, name issuer, asset value, name ram_payer )
 {
    accounts to_acnts( _self, owner.value );
    auto to = to_acnts.find( issuer.value );
@@ -242,4 +242,4 @@ void token::add_balance( name owner, name issuer, asset value, name ram_payer )
 
 } /// namespace enumivo
 
-ENUMIVO_DISPATCH( enumivo::token, (apply)(accept)(trust)(untrust)(issue)(transfer)(swap) )
+ENUMIVO_DISPATCH( enumivo::ubitoken, (apply)(accept)(trust)(untrust)(issue)(transfer)(swap) )

@@ -17,7 +17,7 @@ namespace enumivo {
 
    using std::string;
 
-   class [[enumivo::contract("ubitokentest")]] token : public contract {
+   class [[enumivo::contract("ubitokentest")]] ubitoken : public contract {
       public:
          using contract::contract;
 
