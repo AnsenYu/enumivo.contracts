@@ -22,10 +22,13 @@ namespace enumivo {
          using contract::contract;
 
          [[enumivo::action]]
-         void apply( name   owner, name referral );
+         void launch( name   genesis );
 
          [[enumivo::action]]
-         void accept( name  owner, name candidate );
+         void apply( name   acc, name referral );
+
+         [[enumivo::action]]
+         void accept( name  acc, name candidate );
 
          [[enumivo::action]]
          void trust( name  from, name to );
@@ -44,17 +47,20 @@ namespace enumivo {
                         string  memo );
 
          [[enumivo::action]]
+         void trusttransfer( name    from,
+                        name    to,
+                        name    issuer,
+                        asset   quantity,
+                        string  memo );
+
+         [[enumivo::action]]
          void swap( name    from,
                     name    to,
                     name    from_token_issuer,
                     name    to_token_issuer,
                     asset   quantity);
 
-      private:
 
-#define issue_wait_time (1000000 * 3600 * 24) // wait 1 day to issue
-#define disconnect_wait_time (1000000 * 3600 * 24 * 30) // wait 30 days to due
-#define connection_maximum 50 
          static asset get_supply( name token_contract_account, name issuer)
          {
             issuers issuerstable( token_contract_account, issuer.value );
@@ -145,7 +151,7 @@ namespace enumivo {
 
          struct [[enumivo::table]] issuer {
             name     issuer;
-            name     referral;  // default: _self
+            name     referral;  // default: contract _self
             name     apply;
 
             uint64_t last_issue_time;
@@ -155,9 +161,13 @@ namespace enumivo {
             uint64_t primary_key()const { return issuer.value; }
          };
 
-         const uint64_t time_maximum = 0xffffffffffffffff;
-         const int64_t  initial_issue_quantity = 1000000; // 100.0000 UBI
-         const int64_t delta = 100; // each issue decrease 0.01 UBI
+         static const uint64_t time_maximum = 0xffffffffffffffff;
+         static const int64_t  initial_issue_quantity = 1000000; // 100.0000 UBI
+         static const int64_t delta = 100; // each issue decrease 0.01 UBI
+         static const int64_t referral_rewarding_percentage = 1; // 1% of each issued UBI goes to the referral
+         static const uint64_t issue_wait_time  = (1000000 * 3600 * 24); // wait 1 day to issue
+         static const uint64_t disconnect_wait_time = (1000000 * 3600 * 24 * 30); // wait 30 days to due
+         static const uint32_t connection_maximum = 50; 
 
          static constexpr symbol ubi_symbol = symbol(symbol_code("UBI"), 4);
 

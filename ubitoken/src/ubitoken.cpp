@@ -7,10 +7,26 @@
 
 namespace enumivo {
 
+void token::launch( name genesis )
+{
+  require_auth( _self );
+  enumivo_assert( is_account( genesis ), "genesis account does not exist");
+  issuers issuerstable( _self, genesis.value );
+  issuerstable.emplace( _self, [&]( auto& s ) {
+     s.issuer        = genesis;
+     s.referral      = genesis;
+     s.apply         = genesis;
+     s.last_issue_time = 0;
+     s.supply        = asset{ 0, ubi_symbol };
+     s.next_issue_quantity = asset{ initial_issue_quantity, ubi_symbol };
+  });
+}
+
 void token::apply( name issuer, name referral )
 {
   require_auth( issuer );
   enumivo_assert( is_account( referral ), "referral  account does not exist");
+  accepted_assert( _self, referral );
   issuers issuerstable( _self, issuer.value );
   auto existing = issuerstable.find( issuer.value );
   if ( existing == issuerstable.end() ) {
@@ -20,10 +36,10 @@ void token::apply( name issuer, name referral )
        s.apply         = referral;
        s.last_issue_time = time_maximum;
        s.supply        = asset{ 0, ubi_symbol };
-       s.next_issue_quantity = asset{ 0, ubi_symbol };
+       s.next_issue_quantity = asset{ initial_issue_quantity, ubi_symbol };
     });
   } else {
-    not_accepted_assert(_self, issuer);
+    not_accepted_assert( _self, issuer );
     const auto& st = *existing;
     // update apply
     issuerstable.modify( st, same_payer, [&]( auto& s ) {
@@ -53,7 +69,7 @@ void token::accept( name issuer, name candidate )
   });
 
   const bool revocable = false;
-  connect(issuer, issuer, issuer, revocable);
+  connect(issuer, candidate, candidate, revocable);
   connect(issuer, issuer, candidate, revocable);
   connect(issuer, candidate, issuer, revocable);
 }
@@ -119,6 +135,7 @@ void token::issue( name issuer )
     issuers issuerstable( _self, issuer.value );
     const auto& st = issuerstable.get( issuer.value );
     auto quantity = st.next_issue_quantity;
+    auto referral = st.referral;
 
     enumivo_assert( quantity.amount > 0, "Issuer has no more ubi to issue. Thank you for your support!!" );
 
@@ -128,7 +145,11 @@ void token::issue( name issuer )
        s.next_issue_quantity -= asset(delta, ubi_symbol);
     });
 
-    add_balance( issuer, issuer, quantity, issuer );
+    auto referral_quantity =  quantity * referral_rewarding_percentage / 100;
+    auto issuer_quantity =  quantity - referral_quantity ;
+
+    add_balance( issuer, issuer, issuer_quantity, issuer );
+    add_balance( referral, issuer, referral_quantity, issuer );
 }
 
 void token::transfer( name    from,
@@ -139,6 +160,22 @@ void token::transfer( name    from,
 {
     require_auth( from );
     enumivo_assert( memo.size() <= 256, "memo has more than 256 bytes" );
+    require_recipient( from );
+    require_recipient( to );
+    internal_transfer( from, to, token_issuer, quantity, from);
+}
+
+void token::trusttransfer( name    from,
+                      name    to,
+                      name    token_issuer,
+                      asset   quantity,
+                      string  memo )
+{
+    require_auth( from );
+    enumivo_assert( memo.size() <= 256, "memo has more than 256 bytes" );
+    connection_assert( _self, to, token_issuer );
+    require_recipient( from );
+    require_recipient( to );
     internal_transfer( from, to, token_issuer, quantity, from);
 }
 

@@ -19,6 +19,9 @@ struct contracts {
    static std::vector<uint8_t> bios_wasm() { return read_wasm("${CMAKE_BINARY_DIR}/../enu.bios/enu.bios.wasm"); }
    static std::string          bios_wast() { return read_wast("${CMAKE_BINARY_DIR}/../enu.bios/enu.bios.wast"); }
    static std::vector<char>    bios_abi() { return read_abi("${CMAKE_BINARY_DIR}/../enu.bios/enu.bios.abi"); }
+   static std::vector<uint8_t> ubitoken_wasm() { return read_wasm("${CMAKE_BINARY_DIR}/../ubitoken/ubitoken.wasm"); }
+   static std::string          ubitoken_wast() { return read_wast("${CMAKE_BINARY_DIR}/../ubitoken/ubitoken.wast"); }
+   static std::vector<char>    ubitoken_abi() { return read_abi("${CMAKE_BINARY_DIR}/../ubitoken/ubitoken.abi"); }
 
    struct util {
       static std::vector<uint8_t> test_api_wasm() { return read_wasm("${CMAKE_SOURCE_DIR}/test_contracts/test_api.wasm"); }
