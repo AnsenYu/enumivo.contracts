@@ -62,7 +62,6 @@ public:
    fc::variant get_issuer( account_name acc )
    {
       vector<char> data = get_row_by_account( N(ubitoken), acc, N(issuers), acc );
-      printf("get issuer, data size:%d", data.size());
       return data.empty() ? fc::variant() : abi_ser.binary_to_variant( "issuer", data, abi_serializer_max_time );
    }
 
@@ -149,19 +148,12 @@ public:
 
 BOOST_AUTO_TEST_SUITE(ubitoken_tests)
 
+
 BOOST_FIXTURE_TEST_CASE( launch_tests, ubitoken_tester ) try {
 
-
-	/*
-   BOOST_CHECK_EXCEPTION( launch( N(alice) ) , asset_type_exception, [](const asset_type_exception& e) {
-      return expect_assert_message(e, "magnitude of asset amount must be less than 2^62");
-   });
-   */
-
-	/*
-   BOOST_REQUIRE_EQUAL( wasm_assert_msg( "" ),
-	   launch( N(alice) )
-   ); */
+   BOOST_REQUIRE_EQUAL( wasm_assert_msg( "genesis account does not exist" ), 
+       launch( N(john) )
+   );
 
    auto token = launch( N(alice) );
    auto issuer = get_issuer( N(alice) );
@@ -172,6 +164,135 @@ BOOST_FIXTURE_TEST_CASE( launch_tests, ubitoken_tester ) try {
       ("last_issue_time", 0)
       ("supply", "0.0000 UBI")
       ("next_issue_quantity", "100.0000 UBI")
+   );
+   auto conn = get_connection( N(alice), N(alice) );
+   REQUIRE_MATCHING_OBJECT( conn, mvo()
+      ("peer", "alice")
+      ("trust_due_time", 0xffffffffffffffff)
+      ("revocable", false)
+   );
+   produce_blocks(1);
+
+} FC_LOG_AND_RETHROW()
+
+BOOST_FIXTURE_TEST_CASE( apply_tests, ubitoken_tester ) try {
+
+   launch( N(alice) );
+   produce_blocks(1);
+   BOOST_REQUIRE_EQUAL( wasm_assert_msg( "referral account does not exist" ), 
+       apply( N(bob), N(john) )
+   );
+
+   apply( N(bob), N(alice) );
+   auto issuer = get_issuer( N(bob) );
+   REQUIRE_MATCHING_OBJECT( issuer, mvo()
+      ("issuer", "bob")
+      ("referral", "ubitoken")
+      ("apply", "alice")
+      ("last_issue_time", 0xffffffffffffffff)
+      ("supply", "0.0000 UBI")
+      ("next_issue_quantity", "0.0000 UBI")
+   );
+   produce_blocks(1);
+
+   accept( N(alice), N(bob) );
+   issuer = get_issuer( N(bob) );
+   REQUIRE_MATCHING_OBJECT( issuer, mvo()
+      ("issuer", "bob")
+      ("referral", "alice")
+      ("apply", "alice")
+      ("last_issue_time", 0)
+      ("supply", "0.0000 UBI")
+      ("next_issue_quantity", "100.0000 UBI")
+   );
+   produce_blocks(1);
+
+   apply( N(carol), N(alice) );
+   issuer = get_issuer( N(carol) );
+   REQUIRE_MATCHING_OBJECT( issuer, mvo()
+      ("issuer", "carol")
+      ("referral", "ubitoken")
+      ("apply", "alice")
+      ("last_issue_time", 0xffffffffffffffff)
+      ("supply", "0.0000 UBI")
+      ("next_issue_quantity", "0.0000 UBI")
+   );
+   produce_blocks(1);
+
+   // carol change to apply to bob
+   apply( N(carol), N(bob) );
+   issuer = get_issuer( N(carol) );
+   REQUIRE_MATCHING_OBJECT( issuer, mvo()
+      ("issuer", "carol")
+      ("referral", "ubitoken")
+      ("apply", "bob")
+      ("last_issue_time", 0xffffffffffffffff)
+      ("supply", "0.0000 UBI")
+      ("next_issue_quantity", "0.0000 UBI")
+   );
+   produce_blocks(1);
+
+   BOOST_REQUIRE_EQUAL( wasm_assert_msg( "candidate is not applying for current issuer."),
+       accept( N(alice), N(carol) )
+   );
+
+
+} FC_LOG_AND_RETHROW()
+
+BOOST_FIXTURE_TEST_CASE( accept_tests, ubitoken_tester ) try {
+   launch( N(alice) );
+   produce_blocks(1);
+
+   apply( N(bob), N(alice) );
+   produce_blocks(1);
+
+   accept( N(alice), N(bob) );
+   auto conn = get_connection( N(bob), N(alice) );
+   REQUIRE_MATCHING_OBJECT( conn, mvo()
+      ("peer", "alice")
+      ("trust_due_time", 0xffffffffffffffff)
+      ("revocable", false)
+   );
+   conn = get_connection( N(alice), N(bob) );
+   REQUIRE_MATCHING_OBJECT( conn, mvo()
+      ("peer", "bob")
+      ("trust_due_time", 0xffffffffffffffff)
+      ("revocable", false)
+   );
+   conn = get_connection( N(bob), N(bob) );
+   REQUIRE_MATCHING_OBJECT( conn, mvo()
+      ("peer", "bob")
+      ("trust_due_time", 0xffffffffffffffff)
+      ("revocable", false)
+   );
+   produce_blocks(1);
+
+} FC_LOG_AND_RETHROW()
+
+BOOST_FIXTURE_TEST_CASE( trust_tests, ubitoken_tester ) try {
+   launch( N(alice) );
+   produce_blocks(1);
+
+   apply( N(bob), N(alice) );
+   produce_blocks(1);
+
+   accept( N(alice), N(bob) );
+   produce_blocks(1);
+
+   apply( N(carol), N(alice) );
+   produce_blocks(1);
+
+   accept( N(alice), N(carol) );
+   produce_blocks(1);
+
+
+   trust( N(bob), N(carol) );
+
+   auto conn = get_connection( N(bob), N(carol) );
+   REQUIRE_MATCHING_OBJECT( conn, mvo()
+      ("peer", "carol")
+      ("trust_due_time", 0xffffffffffffffff)
+      ("revocable", true)
    );
    produce_blocks(1);
 

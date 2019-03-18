@@ -20,6 +20,8 @@ void ubitoken::launch( name genesis )
      s.supply        = asset{ 0, ubi_symbol };
      s.next_issue_quantity = asset{ initial_issue_quantity, ubi_symbol };
   });
+  const bool revocable = false;
+  connect(_self, genesis, genesis, revocable);
 }
 
 void ubitoken::apply( name issuer, name referral )
@@ -36,7 +38,7 @@ void ubitoken::apply( name issuer, name referral )
        s.apply         = referral;
        s.last_issue_time = time_maximum;
        s.supply        = asset{ 0, ubi_symbol };
-       s.next_issue_quantity = asset{ initial_issue_quantity, ubi_symbol };
+       s.next_issue_quantity = asset{ 0, ubi_symbol };
     });
   } else {
     not_accepted_assert( _self, issuer );
