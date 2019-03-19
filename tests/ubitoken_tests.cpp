@@ -313,5 +313,27 @@ BOOST_FIXTURE_TEST_CASE( trust_tests, ubitoken_tester ) try {
 
 } FC_LOG_AND_RETHROW()
 
+BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
+   launch( N(alice) );
+   produce_blocks(1);
+
+   issue(alice);
+   auto issuer = get_issuer( N(alice) );
+   REQUIRE_MATCHING_OBJECT( issuer, mvo()
+      ("issuer", "alice")
+      ("referral", "alice")
+      ("apply", "alice")
+      ("last_issue_time", 0)
+      ("supply", "100.0000 UBI")
+      ("next_issue_quantity", "99.9900 UBI")
+   );
+   auto account = get_account( N(alice), N(alice) );
+   REQUIRE_MATCHING_OBJECT( account, mvo()
+      ("balance", "100.0000 UBI")
+      ("issuer", "alice")
+   );
+
+} FC_LOG_AND_RETHROW()
+
 
 BOOST_AUTO_TEST_SUITE_END()
