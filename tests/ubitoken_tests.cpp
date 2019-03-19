@@ -420,6 +420,21 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
       ("issuer", "bob")
    );
 
+   issue( N(carol) );
+   produce_blocks(1);
+
+   account = get_account( N(alice), N(carol) );
+   REQUIRE_MATCHING_OBJECT( account, mvo()
+      ("balance", "1.0000 UBI")
+      ("issuer", "carol")
+   );
+   swap( N(alice), N(carol), N(bob), N(carol), asset::from_string("0.5000 UBI") );
+   produce_blocks(1);
+   account = get_account( N(alice), N(carol) );
+   REQUIRE_MATCHING_OBJECT( account, mvo()
+      ("balance", "1.5000 UBI")
+      ("issuer", "carol")
+   );
 
 } FC_LOG_AND_RETHROW()
 
