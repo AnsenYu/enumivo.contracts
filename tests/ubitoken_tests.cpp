@@ -390,7 +390,7 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
        send( N(alice), N(carol), N(alice), asset::from_string("10.0000 UBI"), "hello" )
    );
 
-   accept( N(alice), N(bob) );
+   accept( N(alice), N(carol) );
    produce_blocks(1);
 
    send( N(alice), N(carol), N(alice), asset::from_string("10.0000 UBI"), "gift from alice" );
@@ -398,7 +398,26 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
    send( N(bob), N(carol), N(bob), asset::from_string("10.0000 UBI"), "gift from bob" );
    // carol doesnot trust bob, cannot trustsend
    BOOST_REQUIRE_EQUAL( wasm_assert_msg( "connection not exist" ), 
-       trustsend( N(alice), N(carol), N(alice), asset::from_string("10.0000 UBI"), "hello" )
+       trustsend( N(alice), N(carol), N(bob), asset::from_string("1.0000 UBI"), "hello" )
+   );
+   produce_blocks(1);
+   account = get_account( N(carol), N(alice) );
+   REQUIRE_MATCHING_OBJECT( account, mvo()
+      ("balance", "10.0000 UBI")
+      ("issuer", "alice")
+   );
+   account = get_account( N(carol), N(bob) );
+   REQUIRE_MATCHING_OBJECT( account, mvo()
+      ("balance", "10.0000 UBI")
+      ("issuer", "bob")
+   );
+   trust( N(carol), N(bob) );
+   trustsend( N(bob), N(carol), N(bob), asset::from_string("10.0000 UBI"), "hello" )
+   produce_blocks(1);
+   account = get_account( N(carol), N(bob) );
+   REQUIRE_MATCHING_OBJECT( account, mvo()
+      ("balance", "10.0000 UBI")
+      ("issuer", "bob")
    );
 
 
