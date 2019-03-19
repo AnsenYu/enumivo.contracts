@@ -298,10 +298,12 @@ BOOST_FIXTURE_TEST_CASE( trust_tests, ubitoken_tester ) try {
 
    untrust( N(bob), N(carol) );
 
+   auto duetime = control->head_block_time().time_since_epoch().count() 
+	   + (int64_t)1000000 * 3600 * 24 * 30;
    conn = get_connection( N(bob), N(carol) );
    REQUIRE_MATCHING_OBJECT( conn, mvo()
       ("peer", "carol")
-      ("trust_due_time", 0xffffffffffffffff)
+      ("trust_due_time", duetime)
       ("revocable", true)
    );
    produce_blocks(1);
