@@ -296,6 +296,16 @@ BOOST_FIXTURE_TEST_CASE( trust_tests, ubitoken_tester ) try {
    );
    produce_blocks(1);
 
+   untrust( N(bob), N(carol) );
+
+   conn = get_connection( N(bob), N(carol) );
+   REQUIRE_MATCHING_OBJECT( conn, mvo()
+      ("peer", "carol")
+      ("trust_due_time", 0xffffffffffffffff)
+      ("revocable", true)
+   );
+   produce_blocks(1);
+
 } FC_LOG_AND_RETHROW()
 
 
