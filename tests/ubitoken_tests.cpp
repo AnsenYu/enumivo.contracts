@@ -323,7 +323,7 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
       ("issuer", "alice")
       ("referral", "alice")
       ("apply", "alice")
-      ("last_issue_time", 0)
+      ("last_issue_time", nowtime())
       ("supply", "100.0000 UBI")
       ("next_issue_quantity", "99.9900 UBI")
    );
