@@ -96,13 +96,13 @@ namespace enumivo {
          static void applied_assert( name token_contract_account, name issuer ) {
             issuers issuerstable( token_contract_account, issuer.value );
             auto existing = issuerstable.find( issuer.value );
-            enumivo_assert( existing != issuerstable.end(), "issuer does not apply for ubi yet" );
+            enumivo_assert( existing != issuerstable.end(), "account does not apply for ubi yet" );
          }
 
          static void accepted_assert( name token_contract_account, name issuer ) {
             applied_assert(token_contract_account, issuer);
             auto referral = get_referral(token_contract_account, issuer);
-            enumivo_assert( referral != token_contract_account, "issuer is not accepted by any referral yet" );
+            enumivo_assert( referral != token_contract_account, "account is not accepted by any referral yet" );
          }
 
          static void not_accepted_assert( name token_contract_account, name issuer ) {
