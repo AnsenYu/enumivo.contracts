@@ -27,7 +27,7 @@ void ubitoken::launch( name genesis )
 void ubitoken::apply( name issuer, name referral )
 {
   require_auth( issuer );
-  enumivo_assert( is_account( referral ), "referral  account does not exist");
+  enumivo_assert( is_account( referral ), "referral account does not exist");
   accepted_assert( _self, referral );
   issuers issuerstable( _self, issuer.value );
   auto existing = issuerstable.find( issuer.value );
@@ -116,7 +116,8 @@ void ubitoken::trust(name from, name to) {
   accepted_assert(_self, from);
   accepted_assert(_self, to);
 
-  connect(from, from, to, false);
+  const bool revocable = true;
+  connect(from, from, to, revocable);
 }
 
 void ubitoken::untrust(name from, name to) {
