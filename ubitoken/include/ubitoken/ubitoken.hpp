@@ -134,6 +134,14 @@ namespace enumivo {
            enumivo_assert( st.trust_due_time > current_time(), "connection expire" );
          }
 
+         static void trust_assert( name token_contract_account, name from, name to) {
+           connections connectiontable( token_contract_account, from.value );
+           auto existing = connectiontable.find(to.value);
+           enumivo_assert( existing != connectiontable.end(), "connection not exist" );
+           const auto& st = *existing;
+           enumivo_assert( st.trust_due_time == time_maximum, "account has already revoke trust." );
+         }
+
          struct [[enumivo::table]] account {
             asset    balance;
             name     issuer;

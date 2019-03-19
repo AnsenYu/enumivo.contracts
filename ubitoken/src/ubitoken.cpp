@@ -124,8 +124,9 @@ void ubitoken::untrust(name from, name to) {
   require_auth( from );
   enumivo_assert( is_account( to ), "to account does not exist");
 
-  accepted_assert(_self, from);
-  accepted_assert(_self, to);
+  accepted_assert( _self, from );
+  accepted_assert( _self, to );
+  trust_assert( _self, from, to );
 
   disconnect(from, to);
 }
