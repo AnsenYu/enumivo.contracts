@@ -383,7 +383,7 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
        send( N(alice), N(carol), N(alice), asset::from_string("10.0000 UBI"), "hello" )
    );
 
-   apply( N(bob), N(alice) );
+   apply( N(carol), N(alice) );
    produce_blocks(1);
 
    BOOST_REQUIRE_EQUAL( wasm_assert_msg( "account is not accepted by any referral yet" ), 
