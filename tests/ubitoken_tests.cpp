@@ -36,6 +36,10 @@ public:
       abi_ser.set_abi(abi, abi_serializer_max_time);
    }
 
+   int64_t nowtime() {
+     return control->head_block_time().time_since_epoch().count(); 
+   }
+
    action_result push_action( const account_name& signer, const action_name &name, const variant_object &data ) {
       string action_type_name = abi_ser.get_action_type(name);
 
@@ -298,8 +302,7 @@ BOOST_FIXTURE_TEST_CASE( trust_tests, ubitoken_tester ) try {
 
    untrust( N(bob), N(carol) );
 
-   auto duetime = control->head_block_time().time_since_epoch().count() 
-	   + (int64_t)1000000 * 3600 * 24 * 30;
+   auto duetime = nowtime() + (int64_t)1000000 * 3600 * 24 * 30;
    conn = get_connection( N(bob), N(carol) );
    REQUIRE_MATCHING_OBJECT( conn, mvo()
       ("peer", "carol")
