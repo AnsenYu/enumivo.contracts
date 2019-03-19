@@ -332,6 +332,38 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
       ("balance", "100.0000 UBI")
       ("issuer", "alice")
    );
+   produce_blocks(1);
+   BOOST_REQUIRE_EQUAL( wasm_assert_msg( "issue too early" ), 
+       issue( N(alice) );
+   );
+
+   apply( N(bob), N(alice) );
+   produce_blocks(1);
+
+   accept( N(alice), N(bob) );
+   produce_blocks(1);
+
+   issue( N(bob) );
+   issuer = get_issuer( N(bob) );
+   REQUIRE_MATCHING_OBJECT( issuer, mvo()
+      ("issuer", "bob")
+      ("referral", "alice")
+      ("apply", "alice")
+      ("last_issue_time", nowtime())
+      ("supply", "100.0000 UBI")
+      ("next_issue_quantity", "99.9900 UBI")
+   );
+   account = get_account( N(bob), N(bob) );
+   REQUIRE_MATCHING_OBJECT( account, mvo()
+      ("balance", "99.0000 UBI")
+      ("issuer", "bob")
+   );
+   account = get_account( N(alice), N(bob) );
+   REQUIRE_MATCHING_OBJECT( account, mvo()
+      ("balance", "1.0000 UBI")
+      ("issuer", "bob")
+   );
+   produce_blocks(1);
 
 } FC_LOG_AND_RETHROW()
 
