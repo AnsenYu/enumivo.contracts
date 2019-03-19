@@ -334,7 +334,7 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
    );
    produce_blocks(1);
    BOOST_REQUIRE_EQUAL( wasm_assert_msg( "issue too early" ), 
-       issue( N(alice) );
+       issue( N(alice) )
    );
 
    apply( N(bob), N(alice) );
