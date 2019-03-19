@@ -412,11 +412,11 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
       ("issuer", "bob")
    );
    trust( N(carol), N(bob) );
-   trustsend( N(bob), N(carol), N(bob), asset::from_string("10.0000 UBI"), "hello" )
+   trustsend( N(bob), N(carol), N(bob), asset::from_string("10.0000 UBI"), "hello" );
    produce_blocks(1);
    account = get_account( N(carol), N(bob) );
    REQUIRE_MATCHING_OBJECT( account, mvo()
-      ("balance", "10.0000 UBI")
+      ("balance", "20.0000 UBI")
       ("issuer", "bob")
    );
 
