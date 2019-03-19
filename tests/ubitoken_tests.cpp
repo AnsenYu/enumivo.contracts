@@ -317,7 +317,7 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
    launch( N(alice) );
    produce_blocks(1);
 
-   issue(alice);
+   issue( N(alice) );
    auto issuer = get_issuer( N(alice) );
    REQUIRE_MATCHING_OBJECT( issuer, mvo()
       ("issuer", "alice")
