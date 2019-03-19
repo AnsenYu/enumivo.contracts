@@ -380,25 +380,25 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
    produce_blocks(1);
 
    BOOST_REQUIRE_EQUAL( wasm_assert_msg( "account does not apply for ubi yet" ), 
-       send( N(alice), N(carol), N(alice), "10.0000 UBI", "hello" )
+       send( N(alice), N(carol), N(alice), asset::from_string("10.0000 UBI"), "hello" )
    );
 
    apply( N(bob), N(alice) );
    produce_blocks(1);
 
    BOOST_REQUIRE_EQUAL( wasm_assert_msg( "account is not accepted by any referral yet" ), 
-       send( N(alice), N(carol), N(alice), "10.0000 UBI", "hello" )
+       send( N(alice), N(carol), N(alice), asset::from_string("10.0000 UBI"), "hello" )
    );
 
    accept( N(alice), N(bob) );
    produce_blocks(1);
 
-   send( N(alice), N(carol), N(alice), "10.0000 UBI", "gift from alice" );
+   send( N(alice), N(carol), N(alice), asset::from_string("10.0000 UBI"), "gift from alice" );
    // carol can accept bob'token even he does not trust bob 
-   send( N(bob), N(carol), N(bob), "10.0000 UBI", "gift from bob" );
+   send( N(bob), N(carol), N(bob), asset::from_string("10.0000 UBI"), "gift from bob" );
    // carol doesnot trust bob, cannot trustsend
    BOOST_REQUIRE_EQUAL( wasm_assert_msg( "connection not exist" ), 
-       trustsend( N(alice), N(carol), N(alice), "10.0000 UBI", "hello" )
+       trustsend( N(alice), N(carol), N(alice), asset::from_string("10.0000 UBI"), "hello" )
    );
 
 
