@@ -400,6 +400,16 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
    BOOST_REQUIRE_EQUAL( wasm_assert_msg( "connection not exist" ), 
        trustsend( N(alice), N(carol), N(bob), asset::from_string("1.0000 UBI"), "hello" )
    );
+
+   produce_blocks(1);
+   issue( N(carol) );
+   produce_blocks(1);
+   // carol doesnot trust bob, cannot trustsend
+   BOOST_REQUIRE_EQUAL( wasm_assert_msg( "connection not exist" ), 
+       swap( N(alice), N(carol), N(bob), N(carol), asset::from_string("0.5000 UBI") )
+   );
+
+
    produce_blocks(1);
    account = get_account( N(carol), N(alice) );
    REQUIRE_MATCHING_OBJECT( account, mvo()
@@ -420,8 +430,6 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
       ("issuer", "bob")
    );
 
-   issue( N(carol) );
-   produce_blocks(1);
 
    account = get_account( N(alice), N(carol) );
    REQUIRE_MATCHING_OBJECT( account, mvo()
