@@ -325,6 +325,8 @@ BOOST_FIXTURE_TEST_CASE( trust_tests, ubitoken_tester ) try {
    );
    produce_blocks(1);
 
+
+
 } FC_LOG_AND_RETHROW()
 
 BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
@@ -442,6 +444,14 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
    REQUIRE_MATCHING_OBJECT( account, mvo()
       ("balance", "1.5000 UBI")
       ("issuer", "carol")
+   );
+
+   trust( N(carol), N(bob) );
+   produce_blocks(1);
+   produce_block( fc::days(30) );
+   // carol doesnot trust bob, cannot trustsend
+   BOOST_REQUIRE_EQUAL( wasm_assert_msg( "connection not exist" ), 
+       trustsend( N(alice), N(carol), N(bob), asset::from_string("1.0000 UBI"), "hello" )
    );
 
 } FC_LOG_AND_RETHROW()
