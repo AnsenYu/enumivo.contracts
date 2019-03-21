@@ -446,7 +446,7 @@ BOOST_FIXTURE_TEST_CASE( issue_tests, ubitoken_tester ) try {
       ("issuer", "carol")
    );
 
-   trust( N(carol), N(bob) );
+   untrust( N(carol), N(bob) );
    produce_blocks(1);
    produce_block( fc::days(30) );
    // carol doesnot trust bob, cannot trustsend
