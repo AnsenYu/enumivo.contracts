@@ -115,7 +115,7 @@ public:
    action_result issue( account_name issuer ) {
 
       return push_action( issuer, N(claim), mvo()
-           ( "issuer", issuer)
+           ( "acc", issuer)
       );
    }
 
