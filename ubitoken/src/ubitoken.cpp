@@ -131,7 +131,7 @@ void ubitoken::untrust(name from, name to) {
   disconnect(from, to);
 }
 
-void ubitoken::issue( name issuer )
+void ubitoken::claim( name issuer )
 {
     require_auth( issuer );
     issue_qualify_assert( _self, issuer );
@@ -246,4 +246,4 @@ void ubitoken::add_balance( name owner, name issuer, asset value, name ram_payer
 
 } /// namespace enumivo
 
-ENUMIVO_DISPATCH( enumivo::ubitoken, (launch)(apply)(accept)(trust)(untrust)(issue)(send)(trustsend)(swap) )
+ENUMIVO_DISPATCH( enumivo::ubitoken, (launch)(apply)(accept)(trust)(untrust)(claim)(send)(trustsend)(swap) )

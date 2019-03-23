@@ -37,7 +37,7 @@ namespace enumivo {
          void untrust( name  from, name to );
 
          [[enumivo::action]]
-         void issue(  name  issuer );
+         void claim(  name  acc );
 
          [[enumivo::action]]
          void send( name    from,
