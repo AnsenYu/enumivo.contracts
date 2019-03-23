@@ -1,0 +1,296 @@
+{
+    "____comment": "This file was generated with enumivo-abigen. DO NOT EDIT Sat Mar 23 07:16:52 2019",
+    "version": "enumivo::abi/1.1",
+    "structs": [
+        {
+            "name": "accept",
+            "base": "",
+            "fields": [
+                {
+                    "name": "acc",
+                    "type": "name"
+                },
+                {
+                    "name": "candidate",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "account",
+            "base": "",
+            "fields": [
+                {
+                    "name": "balance",
+                    "type": "asset"
+                },
+                {
+                    "name": "issuer",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "apply",
+            "base": "",
+            "fields": [
+                {
+                    "name": "acc",
+                    "type": "name"
+                },
+                {
+                    "name": "referral",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "claim",
+            "base": "",
+            "fields": [
+                {
+                    "name": "acc",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "connection",
+            "base": "",
+            "fields": [
+                {
+                    "name": "peer",
+                    "type": "name"
+                },
+                {
+                    "name": "trust_due_time",
+                    "type": "uint64"
+                },
+                {
+                    "name": "revocable",
+                    "type": "uint8"
+                }
+            ]
+        },
+        {
+            "name": "issuer",
+            "base": "",
+            "fields": [
+                {
+                    "name": "issuer",
+                    "type": "name"
+                },
+                {
+                    "name": "referral",
+                    "type": "name"
+                },
+                {
+                    "name": "apply",
+                    "type": "name"
+                },
+                {
+                    "name": "last_issue_time",
+                    "type": "uint64"
+                },
+                {
+                    "name": "supply",
+                    "type": "asset"
+                },
+                {
+                    "name": "next_issue_quantity",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "launch",
+            "base": "",
+            "fields": [
+                {
+                    "name": "genesis",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "send",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "issuer",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                },
+                {
+                    "name": "memo",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "swap",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "from_token_issuer",
+                    "type": "name"
+                },
+                {
+                    "name": "to_token_issuer",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "trust",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "trustsend",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "issuer",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                },
+                {
+                    "name": "memo",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "untrust",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                }
+            ]
+        }
+    ],
+    "types": [],
+    "actions": [
+        {
+            "name": "accept",
+            "type": "accept",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "apply",
+            "type": "apply",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "claim",
+            "type": "claim",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "launch",
+            "type": "launch",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "send",
+            "type": "send",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "swap",
+            "type": "swap",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "trust",
+            "type": "trust",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "trustsend",
+            "type": "trustsend",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "untrust",
+            "type": "untrust",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "accounts",
+            "type": "account",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "connections",
+            "type": "connection",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "issuers",
+            "type": "issuer",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "variants": [],
+    "abi_extensions": []
+}
